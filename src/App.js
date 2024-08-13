@@ -4,7 +4,7 @@ import InstallPrompt from './components/InstallPrompt';
 import CannotDownloadPage from './components/CannotDownloadPage';
 import DesktopView from './components/DesktopView';
 import { BrowserView, MobileView } from 'react-device-detect';
-import MobileAppView from './components/MobileAppView';
+import MobileApp from './components/MobileApp';
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -43,20 +43,20 @@ function App() {
 
   const renderAppStatus = () => {
     switch (appStatus) {
-      case 'installable':
+      case 'installable': // app is installable via mobile browser
         return <InstallPrompt handleInstallClick={handleInstallClick} />;
-      case 'standalone': // app is running in standalone mode
-        return <MobileAppView />;
-      case 'unsupported':
+      case 'standalone': // we are inside the downloaded mobile app in standalone mode
+        return <MobileApp />;
+      case 'unsupported': // criteria not met for pwa download prompt (probably due to unsupported browser or https issues)
         return <CannotDownloadPage />;
-      case 'unknown':
+      case 'unknown': // should never happen
       default:
         return <p>Loading or unknown app status...</p>;
     }
   };
 
   return { isDev } ? (
-    <MobileAppView />
+    <MobileApp />
   ) : (
     <>
       <BrowserView>

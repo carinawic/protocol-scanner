@@ -1,7 +1,7 @@
 import PageLayout from './PageLayout';
 
-function MobileAppView() {
+function MobileApp() {
   return <PageLayout header='Welcome to the app' subheader='Take a picture' />;
 }
 
-export default MobileAppView;
+export default MobileApp;
