@@ -4,17 +4,26 @@ import InstallPrompt from './components/InstallPrompt';
 import CannotDownloadPage from './components/CannotDownloadPage';
 import DesktopView from './components/DesktopView';
 import { BrowserView, MobileView } from 'react-device-detect';
+import MobileAppView from './components/MobileAppView';
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+  const [appStatus, setAppStatus] = useState('unsupported');
+  const isDev = true;
 
   useEffect(() => {
+    const isStandalone = window.matchMedia(
+      '(display-mode: standalone)'
+    ).matches;
+    if (isStandalone) {
+      setAppStatus('standalone');
+    }
+
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('beforeinstallprompt event fired');
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsInstallable(true);
+      setAppStatus('installable');
     });
   }, []);
 
@@ -32,17 +41,28 @@ function App() {
     }
   };
 
-  return (
+  const renderAppStatus = () => {
+    switch (appStatus) {
+      case 'installable':
+        return <InstallPrompt handleInstallClick={handleInstallClick} />;
+      case 'standalone': // app is running in standalone mode
+        return <MobileAppView />;
+      case 'unsupported':
+        return <CannotDownloadPage />;
+      case 'unknown':
+      default:
+        return <p>Loading or unknown app status...</p>;
+    }
+  };
+
+  return { isDev } ? (
+    <MobileAppView />
+  ) : (
     <>
       <BrowserView>
         <DesktopView />
       </BrowserView>
-      <MobileView>
-        {isInstallable && (
-          <InstallPrompt handleInstallClick={handleInstallClick} />
-        )}
-        <CannotDownloadPage />
-      </MobileView>
+      <MobileView>{renderAppStatus()}</MobileView>
     </>
   );
 }
