@@ -3,8 +3,8 @@ import PageLayout from './PageLayout';
 function CannotDownloadPage() {
   return (
     <PageLayout
-      header='Bad Browser'
-      subheader='Cannot install app via this browser.'
+      header='Use the app'
+      subheader='Protocol scanner is only supporten as a mobile app.'
     ></PageLayout>
   );
 }
