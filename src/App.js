@@ -2,7 +2,8 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import InstallPrompt from './components/InstallPrompt';
 import CannotDownloadPage from './components/CannotDownloadPage';
-// import { BrowserView, MobileView } from 'react-device-detect';
+import DesktopView from './components/DesktopView';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -31,10 +32,18 @@ function App() {
     }
   };
 
-  return isInstallable ? (
-    <InstallPrompt handleInstallClick={handleInstallClick} />
-  ) : (
-    <CannotDownloadPage />
+  return (
+    <>
+      <BrowserView>
+        <DesktopView />
+      </BrowserView>
+      <MobileView>
+        {isInstallable && (
+          <InstallPrompt handleInstallClick={handleInstallClick} />
+        )}
+        <CannotDownloadPage />
+      </MobileView>
+    </>
   );
 }
 
