@@ -1,8 +1,10 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import InstallPrompt from './components/InstallPrompt';
+import CannotDownloadPage from './components/CannotDownloadPage';
+// import { BrowserView, MobileView } from 'react-device-detect';
 
 function App() {
-
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
@@ -29,13 +31,11 @@ function App() {
     }
   };
 
-  return (
-    isInstallable ? 
-      <h2> Button placeholder </h2> :
-      //<InstallPrompt handleInstallClick={handleInstallClick} /> :
-      <h2> Can not install app on this browser </h2>
+  return isInstallable ? (
+    <InstallPrompt handleInstallClick={handleInstallClick} />
+  ) : (
+    <CannotDownloadPage />
   );
-
 }
 
 export default App;
